@@ -48,17 +48,17 @@ server.tool(
       ),
   },
   async ({ url }) => {
-    // const context = getCurrentContext();
-    // if (!context) {
-    //   return {
-    //     content: [
-    //       {
-    //         type: "text",
-    //         text: "No browser context is currently open. Please launch a web page first using web-launcher.",
-    //       },
-    //     ],
-    //   };
-    // }
+    const context = getCurrentContext();
+    if (!context) {
+      return {
+        content: [
+          {
+            type: "text",
+            text: "No browser context is currently open. Please launch a web page first using web-launcher.",
+          },
+        ],
+      };
+    }
     await openNewPage(url);
     return {
       content: [
@@ -76,6 +76,7 @@ server.tool(
   "Get the number of currently open pages and their names/URLs",
   {
     context: z.object({}).optional(),
+    
   },
   async () => {
     const context = getCurrentContext();
