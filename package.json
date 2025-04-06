@@ -1,0 +1,23 @@
+{
+  "name": "mcp-server-playwright",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc && chmod +x ./build/index.js",
+    "inspector": "npx @modelcontextprotocol/inspector node ./build/index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.7.1",
+  "devDependencies": {
+    "playwright": "^1.51.1",
+    "@types/node": "^22.13.11",
+    "typescript": "^5.8.2"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.7.0",
+    "zod": "^3.24.2"
+  }
+}
