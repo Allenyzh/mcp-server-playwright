@@ -28,11 +28,6 @@ export async function getPageStats(contextOrPage: BrowserContext | Page) {
     })
   );
 
-  console.error(`Number of open pages: ${pages.length}`);
-  console.error("Open pages:");
-  pageInfo.forEach((page) => {
-    console.error(`- ${page.title} (${page.url})`);
-  });
 
   return {
     count: pages.length,

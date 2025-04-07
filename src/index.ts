@@ -19,11 +19,23 @@ server.tool(
       .string()
       .url()
       .describe(
-        "The URL of the web page to launch and it must be a valid URL like https://www.google.com"
+        "The URL of the web page to launch for the first time and it must be a valid URL like https://www.google.com"
       ),
   },
   async ({ url }) => {
-    console.error("Launching web page:", url);
+    const context = getCurrentContext();
+    if (context) {
+      await openNewPage(url);
+      return {
+        content: [
+          {
+            type: "text",
+            text: `New page opened successfully!`,
+          },
+        ],
+      };
+    }
+
     await launchWeb(url);
     return {
       content: [
@@ -37,46 +49,10 @@ server.tool(
 );
 
 server.tool(
-  "open-new-page",
-  "Open a new page in the existing browser context",
-  {
-    url: z
-      .string()
-      .url()
-      .describe(
-        "The URL of the web page to open and it must be a valid URL like https://www.google.com"
-      ),
-  },
-  async ({ url }) => {
-    const context = getCurrentContext();
-    if (!context) {
-      return {
-        content: [
-          {
-            type: "text",
-            text: "No browser context is currently open. Please launch a web page first using web-launcher.",
-          },
-        ],
-      };
-    }
-    await openNewPage(url);
-    return {
-      content: [
-        {
-          type: "text",
-          text: `New page opened successfully at ${url}!`,
-        },
-      ],
-    };
-  }
-);
-
-server.tool(
   "web-page-counts",
   "Get the number of currently open pages and their names/URLs",
   {
     context: z.object({}).optional(),
-    
   },
   async () => {
     const context = getCurrentContext();
