@@ -1,5 +1,4 @@
 import { BrowserContext, Page } from "playwright/test";
-import { launchWeb } from "./launchWeb";
 
 /**
  * Returns the number of currently open pages and their names/URLs

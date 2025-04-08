@@ -1,4 +1,3 @@
-import { exec } from "child_process";
 import { chromium, BrowserContext } from "playwright";
 
 // Store the current context globally so it can be accessed by other functions

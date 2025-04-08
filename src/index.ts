@@ -3,6 +3,7 @@ import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js"
 import { z } from "zod";
 import { launchWeb, getCurrentContext, openNewPage } from "./launchWeb";
 import { getPageStats } from "./pageCounts";
+import { closePage } from "./closePage";
 
 // Create a new server instance
 const server = new McpServer({
@@ -79,6 +80,56 @@ server.tool(
         {
           type: "text",
           text: `Number of open pages: ${stats.count}\n\nOpen pages:\n${pageList}`,
+        },
+      ],
+    };
+  }
+);
+
+server.tool(
+  "web-page-close",
+  "Close the current browser context",
+  {
+    i: z.number().describe("The number of the page to close. Do not convert it to the index."),
+  },
+  async ({ i }) => {
+    const context = getCurrentContext();
+
+    if (!context) {
+      return {
+        content: [
+          {
+            type: "text",
+            text: "No browser context is currently open. Please launch a web page first using web-launcher.",
+          },
+        ],
+      };
+    }
+
+    // Check if the page number is valid
+    if (i < 1 || i > context.pages().length) {
+      return {
+        content: [
+          {
+            type: "text",
+            text: `Invalid page number. Please provide a number between 1 and ${
+              context.pages().length
+            }.`,
+          },
+        ],
+      };
+    }
+
+    console.error("Closing: ", context.pages()[i - 1].url());
+    await closePage(context.pages()[i - 1]);
+
+    return {
+      content: [
+        {
+          type: "text",
+          text: `The ${i} ${
+            i == 1 ? "st" : i == 2 ? "nd" : i == 3 ? "rd" : "th"
+          } page closed successfully!`,
         },
       ],
     };
